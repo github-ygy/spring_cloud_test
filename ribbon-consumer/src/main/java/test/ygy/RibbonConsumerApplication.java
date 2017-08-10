@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
+//@RibbonClient(name = "client",configuration =CustomerRibbonConfig.class) //自定义ribbon
 @EnableDiscoveryClient
 public class RibbonConsumerApplication {
 
