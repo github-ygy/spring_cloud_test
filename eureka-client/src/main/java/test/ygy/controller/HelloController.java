@@ -18,4 +18,15 @@ public class HelloController {
         log.info("  this is eureka client server ");
         return " hello ,i am eureka client";
     }
+
+    @GetMapping("/getClientDelay")
+    public String getClientDelay() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("  this is eureka client asyn server");
+        return " hello ,i am eureka client server asyn";
+    }
 }
