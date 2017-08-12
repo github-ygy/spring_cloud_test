@@ -2,9 +2,13 @@ package test.ygy;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.command.AsyncResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import rx.Observable;
+import rx.Observer;
 
 import java.util.concurrent.Future;
 
@@ -14,6 +18,8 @@ import java.util.concurrent.Future;
 @Service("consumerService")
 public class ConsumerService {
 
+    private static final Logger log=LoggerFactory.getLogger(ConsumerService.class);
+
     @Autowired
     private RestTemplate restTemplate ;
 
@@ -22,8 +28,8 @@ public class ConsumerService {
         return restTemplate.getForEntity("http://client/getClient?key=" + key, String.class).getBody();
     }
 
-    public String serviceFallBack() {
-        return " service is error ";
+    public String serviceFallBack(String key) {
+        return " service is error " + key;
     }
 
     //异步获取
@@ -54,6 +60,30 @@ public class ConsumerService {
         return  customerCommand.queue();
     }
 
+    public String observer(String key) {
+        StringBuilder result=new StringBuilder();
+        CustomerObserverCommand observerCommand = new CustomerObserverCommand(restTemplate,"http://client/getClient?key=", key);
+        Observable<String> observer=observerCommand.observe();
+        observer.subscribe(new Observer<String>(){
+            @Override
+            public void onCompleted() {
+                log.info(" on completed");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                log.info(" on error ");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(String s) {
+                result.append(s);
+                log.info(" on next :" + s );
+            }
+        });
+        return result.toString();
+    }
 
 
 }

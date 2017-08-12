@@ -33,7 +33,7 @@ public class ConsumerController {
     }
 
     @RequestMapping("/consumerClient")
-    public String consumerClient(@RequestParam String key ) {
+    public String consumerClient(@RequestParam String key) {
         return consumerService.service(key);
     }
 
@@ -65,4 +65,10 @@ public class ConsumerController {
         }
         return value;
     }
+
+    @RequestMapping("/observer")
+    public String observer(@RequestParam String key) {
+        return consumerService.observer(key);
+    }
+
 }
