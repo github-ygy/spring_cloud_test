@@ -1,6 +1,7 @@
 package test.ygy;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.ObservableExecutionMode;
 import com.netflix.hystrix.contrib.javanica.command.AsyncResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 
 import java.util.concurrent.Future;
 
@@ -42,6 +44,7 @@ public class ConsumerService {
             }
         };
     }
+
     @HystrixCommand  //同步获取 用来比较异步获取
     public String serviceSyn(String key) {
         return restTemplate.getForEntity("http://client/getClientDelay?key="+ key, String.class).getBody();
@@ -62,8 +65,33 @@ public class ConsumerService {
 
     public String observer(String key) {
         StringBuilder result=new StringBuilder();
-        CustomerObserverCommand observerCommand = new CustomerObserverCommand(restTemplate,"http://client/getClient?key=", key);
-        Observable<String> observer=observerCommand.observe();
+        //CustomerObserverCommand observerCommand = new CustomerObserverCommand(restTemplate,"http://client/getClient?key=", key);
+        //return observerDo(observerCommand.observe(),result);
+        return observerDo(observerAnnotion(key),result);
+
+    }
+
+    @HystrixCommand(observableExecutionMode = ObservableExecutionMode.EAGER)
+    public Observable<String> observerAnnotion(String key) {
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                try {
+                    if(!subscriber.isUnsubscribed()){
+                        String value =  restTemplate.getForEntity( "http://client/getClient?key="+ key, String.class).getBody();
+                        subscriber.onNext(value);   //订阅两次此事件
+                        subscriber.onNext(value);
+                        subscriber.onCompleted();
+                    }
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+
+            }
+        });
+    }
+
+    public String observerDo(Observable<String> observer,StringBuilder result) {
         observer.subscribe(new Observer<String>(){
             @Override
             public void onCompleted() {
