@@ -18,8 +18,8 @@ public class ConsumerService {
     private RestTemplate restTemplate ;
 
     @HystrixCommand(fallbackMethod = "serviceFallBack")  //错误回调方法
-    public String service() {
-        return restTemplate.getForEntity("http://client/getClient?key=client", String.class).getBody();
+    public String service(String key) {
+        return restTemplate.getForEntity("http://client/getClient?key=" + key, String.class).getBody();
     }
 
     public String serviceFallBack() {
@@ -28,17 +28,30 @@ public class ConsumerService {
 
     //异步获取
     @HystrixCommand
-    public Future<String> serviceAsyn() {
+    public Future<String> serviceAsyn(final String key) {
         return  new AsyncResult<String>() {
             @Override
             public String invoke() {
-                return  restTemplate.getForEntity("http://client/getClientDelay?key=client", String.class).getBody();
+                return  restTemplate.getForEntity("http://client/getClientDelay?key=" + key, String.class).getBody();
             }
         };
     }
     @HystrixCommand  //同步获取 用来比较异步获取
-    public String serviceSyn() {
-        return restTemplate.getForEntity("http://client/getClientDelay?key=client", String.class).getBody();
+    public String serviceSyn(String key) {
+        return restTemplate.getForEntity("http://client/getClientDelay?key="+ key, String.class).getBody();
+    }
+
+    //自定义customerCommand 来实现容错机制  同步模式
+    public String customerSyn(String key) {
+        // return customerASyn(key).get();
+        CustomerCommand customerCommand=new CustomerCommand(restTemplate,"http://client/getClientDelay?key=", key);
+        return  customerCommand.execute();
+    }
+
+    //自定义customerCommand 来实现容错机制   future模式
+    public Future<String> customerASyn(String key) {
+        CustomerCommand customerCommand=new CustomerCommand(restTemplate,"http://client/getClientDelay?key=", key);
+        return  customerCommand.queue();
     }
 
 

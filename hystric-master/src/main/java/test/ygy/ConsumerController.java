@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,27 +33,29 @@ public class ConsumerController {
     }
 
     @RequestMapping("/consumerClient")
-    public String consumerClient() {
-        return consumerService.service();
+    public String consumerClient(@RequestParam String key ) {
+        return consumerService.service(key);
     }
 
     @RequestMapping("/serviceSyn")  //同步调用
-    public String serviceSyn() {
+    public String serviceSyn(@RequestParam String key) {
         Date date1=new Date();
-        String str=consumerService.serviceSyn();
+        //String str=consumerService.serviceSyn(key);
+        String str=consumerService.customerSyn(key);
         Date date2=new Date();
         log.info(" data2 - date 1 = " + ConcurrentDateUtil.diffDate(date1, date2, ConcurrentDateUtil.Type.MILL));
         return str;
     }
 
     @RequestMapping("/serviceAsyn")   //异步调用
-    public String serviceAsyn() {
+    public String serviceAsyn(@RequestParam String key) {
         Date date1=new Date();
-        Future<String> stringFuture=consumerService.serviceAsyn();
+        //Future<String> stringFuture=consumerService.serviceAsyn(key);
+        Future<String> stringFuture=consumerService.customerASyn(key);
         Date date2=new Date();
-        String key=null;
+        String value=null;
         try {
-            key=stringFuture.get(4000, TimeUnit.MILLISECONDS);
+            value=stringFuture.get(4000, TimeUnit.MILLISECONDS);
             Date date3=new Date();
             log.info(" data2 - date 1 = " + ConcurrentDateUtil.diffDate(date1, date2, ConcurrentDateUtil.Type.MILL));
             log.info(" data3 - date 2 = " + ConcurrentDateUtil.diffDate(date2, date3, ConcurrentDateUtil.Type.MILL));
@@ -60,6 +63,6 @@ public class ConsumerController {
         } catch (Exception e) {
             log.error(" error ", e);
         }
-        return key;
+        return value;
     }
 }
