@@ -49,6 +49,7 @@ public class ConsumerService {
 
     //使用request cache
     @CacheResult (cacheKeyMethod = "serviceSynCacheKey")
+    //@CacheRemove(commandKey = "",cacheKeyMethod = )   //必须指定commandkey
     @HystrixCommand (groupKey = "group",threadPoolKey = "poolKey")//同步获取 用来比较异步获取
     public String serviceSyn( String key) {
         log.info(Thread.currentThread().getName());
