@@ -43,7 +43,10 @@ public class ConsumerController {
         String str=consumerService.serviceSyn(key);
         //String str=consumerService.customerSyn(key);
         Date date2=new Date();
+        consumerService.serviceSyn(key);   //第二次调用检测cache
+        Date date3=new Date();
         log.info(" data2 - date 1 = " + ConcurrentDateUtil.diffDate(date1, date2, ConcurrentDateUtil.Type.MILL));
+        log.info(" data3 - date 2 = " + ConcurrentDateUtil.diffDate(date2, date3, ConcurrentDateUtil.Type.MILL));
         return str;
     }
 

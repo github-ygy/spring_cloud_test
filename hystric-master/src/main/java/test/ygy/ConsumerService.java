@@ -2,6 +2,7 @@ package test.ygy;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.ObservableExecutionMode;
+import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import com.netflix.hystrix.contrib.javanica.command.AsyncResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,10 +47,16 @@ public class ConsumerService {
         };
     }
 
-    @HystrixCommand //同步获取 用来比较异步获取
-    public String serviceSyn(String key) {
+    //使用request cache
+    @CacheResult (cacheKeyMethod = "serviceSynCacheKey")
+    @HystrixCommand (groupKey = "group",threadPoolKey = "poolKey")//同步获取 用来比较异步获取
+    public String serviceSyn( String key) {
         log.info(Thread.currentThread().getName());
         return restTemplate.getForEntity("http://client/getClientDelay?key="+ key, String.class).getBody();
+    }
+
+    public String serviceSynCacheKey(String key) {
+        return key ;
     }
 
     //自定义customerCommand 来实现容错机制  同步模式
