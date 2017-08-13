@@ -37,6 +37,7 @@ public class ConsumerService {
     //异步获取
     @HystrixCommand
     public Future<String> serviceAsyn(final String key) {
+        log.info(Thread.currentThread().getName());
         return  new AsyncResult<String>() {
             @Override
             public String invoke() {
@@ -45,8 +46,9 @@ public class ConsumerService {
         };
     }
 
-    @HystrixCommand  //同步获取 用来比较异步获取
+    @HystrixCommand //同步获取 用来比较异步获取
     public String serviceSyn(String key) {
+        log.info(Thread.currentThread().getName());
         return restTemplate.getForEntity("http://client/getClientDelay?key="+ key, String.class).getBody();
     }
 
@@ -65,7 +67,7 @@ public class ConsumerService {
 
     public String observer(String key) {
         StringBuilder result=new StringBuilder();
-        //CustomerObserverCommand observerCommand = new CustomerObserverCommand(restTemplate,"http://client/getClient?key=", key);
+        //CustomerObserverCommand observerCommand = new CustomerObserverCommand(restTemplate,"http://client/getClientDelay?key=", key);
         //return observerDo(observerCommand.observe(),result);
         return observerDo(observerAnnotion(key),result);
 
@@ -78,7 +80,7 @@ public class ConsumerService {
             public void call(Subscriber<? super String> subscriber) {
                 try {
                     if(!subscriber.isUnsubscribed()){
-                        String value =  restTemplate.getForEntity( "http://client/getClient?key="+ key, String.class).getBody();
+                        String value =  restTemplate.getForEntity( "http://client/getClientDelay?key="+ key, String.class).getBody();
                         subscriber.onNext(value);   //订阅两次此事件
                         subscriber.onNext(value);
                         subscriber.onCompleted();
@@ -86,7 +88,6 @@ public class ConsumerService {
                 } catch (Exception e) {
                     subscriber.onError(e);
                 }
-
             }
         });
     }

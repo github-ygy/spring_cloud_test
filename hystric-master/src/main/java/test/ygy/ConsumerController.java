@@ -40,8 +40,8 @@ public class ConsumerController {
     @RequestMapping("/serviceSyn")  //同步调用
     public String serviceSyn(@RequestParam String key) {
         Date date1=new Date();
-        //String str=consumerService.serviceSyn(key);
-        String str=consumerService.customerSyn(key);
+        String str=consumerService.serviceSyn(key);
+        //String str=consumerService.customerSyn(key);
         Date date2=new Date();
         log.info(" data2 - date 1 = " + ConcurrentDateUtil.diffDate(date1, date2, ConcurrentDateUtil.Type.MILL));
         return str;
@@ -50,8 +50,8 @@ public class ConsumerController {
     @RequestMapping("/serviceAsyn")   //异步调用
     public String serviceAsyn(@RequestParam String key) {
         Date date1=new Date();
-        //Future<String> stringFuture=consumerService.serviceAsyn(key);
-        Future<String> stringFuture=consumerService.customerASyn(key);
+        Future<String> stringFuture=consumerService.serviceAsyn(key);
+        //Future<String> stringFuture=consumerService.customerASyn(key);
         Date date2=new Date();
         String value=null;
         try {
