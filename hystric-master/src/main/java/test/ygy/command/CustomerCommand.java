@@ -18,24 +18,9 @@ public class CustomerCommand extends HystrixCommand<String> {
     private String url ;
 
     public CustomerCommand(RestTemplate restTemplate ,String url, String key) {
-        //this(HystrixCommandGroupKey.Factory.asKey("stringGroup"),restTemplate,url,key);
-        this(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("stringGroup"))  //区分不同的业务
-                .andCommandKey(HystrixCommandKey.Factory.asKey("stringCommandKey"))
-                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("stringThreadKey"))  //隔离线程
-                , restTemplate, url, key);
-    }
-
-
-
-    public CustomerCommand(HystrixCommandGroupKey groupKey , RestTemplate restTemplate,String url, String key) {
-        super(groupKey);
-        this.restTemplate = restTemplate ;
-        this.url=url;
-        this.key=key;
-    }
-
-    public CustomerCommand(Setter setter , RestTemplate restTemplate,String url, String key) {
-        super(setter);
+        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("stringGroup"))  //区分不同的业务
+                .andCommandKey(HystrixCommandKey.Factory.asKey("stringKey"))
+                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("stringThreadKey"))) ; //隔离线程
         this.restTemplate = restTemplate ;
         this.url=url;
         this.key=key;
