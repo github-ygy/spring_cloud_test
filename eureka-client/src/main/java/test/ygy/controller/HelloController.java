@@ -18,6 +18,13 @@ public class HelloController {
 
     private static final Logger log=LoggerFactory.getLogger(HelloController.class);
 
+    @GetMapping("/clientService")
+    public String clientService() {
+        log.info("  this is eureka client helloService ");
+        return " hello ,i am eureka helloService";
+    }
+
+
     @GetMapping("/getClient")
     public String getClient(@RequestParam String key) {
         log.info("  this is eureka client server ");
