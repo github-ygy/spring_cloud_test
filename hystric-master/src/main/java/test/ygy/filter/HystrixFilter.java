@@ -1,4 +1,4 @@
-package test.ygy;
+package test.ygy.filter;
 
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 

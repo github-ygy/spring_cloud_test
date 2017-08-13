@@ -1,4 +1,4 @@
-package test.ygy;
+package test.ygy.command;
 
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixObservableCommand;

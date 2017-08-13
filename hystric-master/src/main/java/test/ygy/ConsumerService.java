@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
+import test.ygy.command.CustomerCommand;
 
 import java.util.concurrent.Future;
 
