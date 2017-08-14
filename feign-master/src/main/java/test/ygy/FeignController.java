@@ -13,8 +13,19 @@ public class FeignController {
     @Autowired
     private FeignService feignService ;
 
-    @RequestMapping("/helloService")
-    public String helloService() {
-       return feignService.clientService();
+    @RequestMapping("/feignService1")
+    public String feignService1() {
+       return feignService.clientService1();
+    }
+
+    @RequestMapping("/feignService2")
+    public String feignService2() {
+       return feignService.clientService2("hello");
+    }
+    @RequestMapping("/feignService3")
+    public String feignService3() {
+        TestQuery testQuery = new TestQuery();
+        testQuery.setKey("hello");
+       return feignService.clientService3(testQuery);
     }
 }

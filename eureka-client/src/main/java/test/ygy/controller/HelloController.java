@@ -2,10 +2,7 @@ package test.ygy.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,11 +15,23 @@ public class HelloController {
 
     private static final Logger log=LoggerFactory.getLogger(HelloController.class);
 
-    @GetMapping("/clientService")
-    public String clientService() {
+    @GetMapping("/clientService1")
+    public String clientService1() {
         log.info("  this is eureka client helloService ");
         return " hello ,i am eureka helloService";
     }
+
+    @RequestMapping("/clientService2")
+    public String clientService2(@RequestParam("key")String key){
+        return  key;
+    }
+
+
+    @RequestMapping("/clientService3")
+    public String clientService3(@RequestBody TestQuery query){
+        return  "query  : " + query.getKey() ;
+    }
+
 
 
     @GetMapping("/getClient")
