@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by guoyao on 2017/8/7.
@@ -18,6 +19,7 @@ public class HelloController {
     @GetMapping("/clientService1")
     public String clientService1() {
         try {
+            log.info("clientService1 sleeptime = " + 1000);
             Thread.sleep(1000);
         } catch (Exception e) {
             log.error(" thread sleep error",e);
@@ -29,7 +31,9 @@ public class HelloController {
     @RequestMapping("/clientService2")
     public String clientService2(@RequestParam("key")String key){
         try {
-            Thread.sleep(2000);
+            int sleepTime=new Random().nextInt(100) + 1450;
+            log.info("clientService2 sleeptime = " + sleepTime);
+            Thread.sleep(sleepTime);   // ribbon　　定义超时时间为1500 测试策略
         } catch (Exception e) {
             log.error(" thread sleep error",e);
         }
@@ -40,6 +44,7 @@ public class HelloController {
     @RequestMapping("/clientService3")
     public String clientService3(@RequestBody TestQuery query){
         try {
+            log.info(" clientService3 sleepTime = " + 3000);
             Thread.sleep(3000);
         } catch (Exception e) {
             log.error(" thread sleep error",e);
