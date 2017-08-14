@@ -1,4 +1,4 @@
-package test.ygy;
+package test.ygy.query;
 
 import lombok.Getter;
 import lombok.Setter;

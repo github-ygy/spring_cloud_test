@@ -3,6 +3,8 @@ package test.ygy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import test.ygy.query.TestQuery;
+import test.ygy.service.FeignService;
 
 /**
  * Created by guoyao on 2017/8/13.
