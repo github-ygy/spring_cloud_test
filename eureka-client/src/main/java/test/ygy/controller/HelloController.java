@@ -17,18 +17,33 @@ public class HelloController {
 
     @GetMapping("/clientService1")
     public String clientService1() {
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            log.error(" thread sleep error",e);
+        }
         log.info("  this is eureka client helloService ");
         return " hello ,i am eureka helloService";
     }
 
     @RequestMapping("/clientService2")
     public String clientService2(@RequestParam("key")String key){
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            log.error(" thread sleep error",e);
+        }
         return  key;
     }
 
 
     @RequestMapping("/clientService3")
     public String clientService3(@RequestBody TestQuery query){
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            log.error(" thread sleep error",e);
+        }
         return  "query  : " + query.getKey() ;
     }
 
