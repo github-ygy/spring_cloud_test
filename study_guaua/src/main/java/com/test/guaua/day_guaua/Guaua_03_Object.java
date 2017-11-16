@@ -1,5 +1,6 @@
 package com.test.guaua.day_guaua;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ComparisonChain;
 import com.test.guaua.dataobject.Person;
 
@@ -12,11 +13,12 @@ import java.util.TreeSet;
 public class Guaua_03_Object {
 
     public static void main(String[] args) {
-        testA();
+        //testA();
+        testB();
     }
 
 
-    //ComparisonChain 比较
+    //ComparisonChain 比较链判断
     public static void testA() {
         Set<Person> primarySet=new TreeSet<>(
                 (x,y)->{
@@ -34,6 +36,12 @@ public class Guaua_03_Object {
         primarySet.add(new Person("c", 13, 0));
         System.out.println(primarySet);
 
+    }
+
+    //比较
+    public static void testB() {
+        System.out.println(Objects.equal(null, "abc"));
+        System.out.println(Objects.equal("abc", "abc"));
     }
 }
 
