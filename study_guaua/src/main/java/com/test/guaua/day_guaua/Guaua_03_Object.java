@@ -1,7 +1,7 @@
 package com.test.guaua.day_guaua;
 
 import com.google.common.collect.ComparisonChain;
-import lombok.Data;
+import com.test.guaua.dataobject.Person;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -36,21 +36,4 @@ public class Guaua_03_Object {
 
     }
 }
-@Data
-class Person{
 
-    public Person(String name, Integer age, Integer sex) {
-        this.name = name ;
-        this.age = age;
-        this.sex =sex ;
-    }
-
-    private String name;
-
-    private Integer age ;
-
-    private Integer sex ;
-
-
-
-}
